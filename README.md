@@ -7,8 +7,8 @@ Développé en Python 3.6.0
 
 ### Windows
 - Télécharger le fichier `taquin.py`
-- Si besoin, installer la dernière version de Python 3 sur [le site officiel]
-(https://www.python.org/downloads/windows/)
+- Si besoin, installer la dernière version de Python 3 sur 
+[le site officiel](https://www.python.org/downloads/windows/)
 - Lancer l'interpréteur : `Démarrer > Programmes > Python 3.6 > IDLE Python GUI`
 - Indiquer à Python dans quel répertoire se trouve `taquin.py` :
 ```python
@@ -18,9 +18,9 @@ Développé en Python 3.6.0
 
 ### Linux
 - Télécharger le fichier `taquin.py`
-- Si besoin, installer la dernière version de Python 3 sur [le site officiel]
-(https://www.python.org/downloads/windows/) ou avec votre gestionnaire de packages 
-habituel
+- Si besoin, installer la dernière version de Python 3 sur 
+[le site officiel](https://www.python.org/downloads/windows/) ou avec votre 
+gestionnaire de packages habituel
 - Ouvrir un terminal, aller dans le répertoire contenant `taquin.py` et lancer
 la commande `python`
 
@@ -34,7 +34,7 @@ la commande `python`
 qu'avec des tailles entre 1 et 3 inclus.
 - On demandera un coefficient qui détermine la façon de calculer la fonction 
 d'évaluation servant à la résolution. Voir le code pour les détails.
-- Le taquin s'affiche sous forme d'un ensemble de cases `(ligne,colonne) : numéro)`
+- Le taquin s'affiche sous forme d'un ensemble de cases `(ligne,colonne) : numéro`
 où le plus grand numéro représente le trou.
 - La solution s'affiche sous forme d'une chaîne composée des lettres N, S, E et O,
 représentant les mouvements du trou dans les directions Nord, Sud, Est et Ouest.
