@@ -87,12 +87,12 @@ class Taquin:
         copie_T.cout += 1
         return copie_T
 
-    def preparer_taquin(self):
+    def melanger_taquin(self):
         """Prend un taquin résolu et le mélange avec un grand nombre de 
         mouvements aléatoires. On est sûr qu'il est résolvable en faisant ça."""
         trou = list(self.chercher(len(self.etat)-1))
 
-        for i in range(100000):
+        for i in range(10000):
             trouHaut = (trou[0] == 0)
             trouBas = (trou[0] == self.taille - 1)
             trouGauche = (trou[1] == 0)
@@ -185,6 +185,10 @@ class Taquin:
                     self = self.bouger_trou("O")
                     trou[1] -= 1
 
+        # on réinitialise les valeurs car bouger_trou les change
+        self.cout = 0
+        self.f = 0
+        self.chemin = ""
         return self
 
 
@@ -205,38 +209,38 @@ class Taquin:
         eNord,eSud,eOuest,eEst = None,None,None,None
 
         if trouHG:
-            eEst = e.bouger_trou("E")
-            eSud = e.bouger_trou("S")
+            eEst = self.bouger_trou("E")
+            eSud = self.bouger_trou("S")
         elif trouHD:
-            eOuest = e.bouger_trou("O")
-            eSud = e.bouger_trou("S")
+            eOuest = self.bouger_trou("O")
+            eSud = self.bouger_trou("S")
         elif trouBG:
-            eNord = e.bouger_trou("N")
-            eEst = e.bouger_trou("E")
+            eNord = self.bouger_trou("N")
+            eEst = self.bouger_trou("E")
         elif trouBD:
-            eNord = e.bouger_trou("N")
-            eOuest = bouger_trou("O")
+            eNord = self.bouger_trou("N")
+            eOuest = self.bouger_trou("O")
         elif trouHaut:
-            eEst = e.bouger_trou("E")
-            eSud = e.bouger_trou("S")
-            eOuest = e.bouger_trou("O")
+            eEst = self.bouger_trou("E")
+            eSud = self.bouger_trou("S")
+            eOuest = self.bouger_trou("O")
         elif trouBas:
-            eNord = e.bouger_trou("N")
-            eEst = e.bouger_trou("E")
-            eOuest = e.bouger_trou("O")
+            eNord = self.bouger_trou("N")
+            eEst = self.bouger_trou("E")
+            eOuest = self.bouger_trou("O")
         elif trouGauche:
-            eNord = e.bouger_trou("N")
-            eSud = e.bouger_trou("S")
-            eEst = e.bouger_trou("E")
+            eNord = self.bouger_trou("N")
+            eSud = self.bouger_trou("S")
+            eEst = self.bouger_trou("E")
         elif trouDroite:
-            eNord = e.bouger_trou("N")
-            eSud = e.bouger_trou("S")
-            eOuest = bouger_trou("O")
+            eNord = self.bouger_trou("N")
+            eSud = self.bouger_trou("S")
+            eOuest = self.bouger_trou("O")
         else:
-            eNord = e.bouger_trou("N")
-            eSud = e.bouger_trou("S")
-            eEst = e.bouger_trou("E")
-            eOuest = bouger_trou("O")
+            eNord = self.bouger_trou("N")
+            eSud = self.bouger_trou("S")
+            eEst = self.bouger_trou("E")
+            eOuest = self.bouger_trou("O")
 
         return [eNord,eSud,eOuest,eEst]
 
@@ -256,7 +260,7 @@ class Taquin:
         Fonction intermédiaire pour la fonction d'évaluation f."""
         elem = [self.dist_elem(i) for i in range(len(self.etat))]
         elem = tuple(elem) 
-        return sum(POIDS[k][i] * elem[i] for i in range(9)) / COEFF[k]
+        return sum(POIDS[k][i] * elem[i] for i in range(len(self.etat))) / COEFF[k]
 
     def calculer_f(self, k):
         return self.cout + self.manhattan(k)
@@ -265,7 +269,7 @@ class Taquin:
 class Frontiere:
     """Liste d'états triés selon leur valeur de f (ordre croissant)."""
     def __init__(self):
-        etats = []
+        self.etats = []
 
     def ajouter(self, e):
         """Ajoute e à la bonne position en fonction de sa valeur de f."""
@@ -284,10 +288,17 @@ class Frontiere:
 class DejaExplores:
     """Arbre binaire contenant les états déjà explorés"""
     def __init__(self):
-        pass
+        self.etats = []
 
     def ajouter(self, e):
-        pass
+        self.etats.append(e)
+
+    def contient(self, e):
+        for i in self.etats:
+            if e.etat == i.etat:
+                return True
+        return False
+        
 
 ###############################################################################
 # ALGORITHME A*                                                               #
@@ -295,10 +306,10 @@ class DejaExplores:
 
 def graph_search():
     # Initialisation =====================================================
-    t0 = Taquin(input("Entrer la taille du taquin : "))
-    pond = input("Pondération pour les distances de Manhattan (0 à 5) : ")
+    t0 = Taquin(int(input("Entrer la taille du taquin : ")))
+    pond = int(input("Pondération pour les distances de Manhattan (0 à 5) : "))
 
-    t0.melanger_taquin() #pour avoir un taquin non résolu
+    t0 = t0.melanger_taquin() #pour avoir un taquin non résolu
     print(t0.etat) #affiche le taquin initial
     frontiere = Frontiere()
     frontiere.ajouter(t0)
@@ -307,23 +318,33 @@ def graph_search():
     if t0.est_solution():
         print("Le taquin est déjà solution.")
         return ""
-
+    
+    t = t0
     # Boucle principale =================================================
     while True:
 
+        print(("taquin actuel, cout, f, chemin",t.etat, "\n", t.cout, t.f, t.chemin))
+        print(("frontiere", [i.etat for i in frontiere.etats]))
         if len(frontiere.etats) == 0:
             return "Frontière vide : pas de solution"
+
+        print("debug : a vérifié la frontière non vide")
 
         t = frontiere.etats.pop(0)
         if t.est_solution():
             return t.chemin
 
-        trou = t.chercher(len(t.etats)-1)
-        expansion = t.expanser(trou) #On récupère une liste des états accessibles
+        print("debug : a vérifié si le taquin à expanser est solution")
+
+        expansion = t.expanser() #On récupère une liste des états accessibles
+        print("debug : a expansé le taquin courant")
         historique.ajouter(t)
+        print("debug : a ajouté le taquin courant à l'historique")
         for i in range(len(expansion)):
             if not expansion[i] == None:
                 expansion[i].f = expansion[i].calculer_f(pond)
                 if not historique.contient(expansion[i]):
                     frontiere.ajouter(expansion[i])
+            print("debug : a ajouté un état à la frontière")
 
+        print("Fin d'une itération.\n\n")
