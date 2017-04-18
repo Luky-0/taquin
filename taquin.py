@@ -92,16 +92,16 @@ class Taquin:
         mouvements aléatoires. On est sûr qu'il est résolvable en faisant ça."""
         trou = list(self.chercher(len(self.etat)-1))
 
-        trouHaut = (trou[1] == 0)
-        trouBas = (trou[1] == self.taille - 1)
-        trouGauche = (trou[0] == 0)
-        trouDroite = (trou[0] == self.taille - 1)
-        trouHG = trouHaut and trouGauche
-        trouHD = trouHaut and trouDroite
-        trouBG = trouBas and trouGauche
-        trouBD = trouBas and trouDroite
+        for i in range(100000):
+            trouHaut = (trou[0] == 0)
+            trouBas = (trou[0] == self.taille - 1)
+            trouGauche = (trou[1] == 0)
+            trouDroite = (trou[1] == self.taille - 1)
+            trouHG = trouHaut and trouGauche
+            trouHD = trouHaut and trouDroite
+            trouBG = trouBas and trouGauche
+            trouBD = trouBas and trouDroite
 
-        for i in range(100):
             x = randint(1,12)
             if trouHG:
                 if x <= 6:
@@ -185,7 +185,7 @@ class Taquin:
                     self = self.bouger_trou("O")
                     trou[1] -= 1
 
-            return self
+        return self
 
 
     def expanser(self):
@@ -193,10 +193,10 @@ class Taquin:
 
         trou = self.chercher(len(self.etat) - 1)
         
-        trouHaut = (trou[1] == 0)
-        trouBas = (trou[1] == self.taille - 1)
-        trouGauche = (trou[0] == 0)
-        trouDroite = (trou[0] == self.taille - 1)
+        trouHaut = (trou[0] == 0)
+        trouBas = (trou[0] == self.taille - 1)
+        trouGauche = (trou[1] == 0)
+        trouDroite = (trou[1] == self.taille - 1)
         trouHG = trouHaut and trouGauche
         trouHD = trouHaut and trouDroite
         trouBG = trouBas and trouGauche
