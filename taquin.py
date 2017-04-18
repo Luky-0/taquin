@@ -278,7 +278,7 @@ class Frontiere:
         else:
             fait = False
             for i in range(len(self.etats)):
-                if self.etats[i].f >= e.f:
+                if self.etats[i].f >= e.f and not fait:
                     self.etats.insert(i,e)
                     fait = True
             if not fait:
@@ -323,28 +323,17 @@ def graph_search():
     # Boucle principale =================================================
     while True:
 
-        print(("taquin actuel, cout, f, chemin",t.etat, "\n", t.cout, t.f, t.chemin))
-        print(("frontiere", [i.etat for i in frontiere.etats]))
         if len(frontiere.etats) == 0:
             return "Frontière vide : pas de solution"
-
-        print("debug : a vérifié la frontière non vide")
 
         t = frontiere.etats.pop(0)
         if t.est_solution():
             return t.chemin
 
-        print("debug : a vérifié si le taquin à expanser est solution")
-
         expansion = t.expanser() #On récupère une liste des états accessibles
-        print("debug : a expansé le taquin courant")
         historique.ajouter(t)
-        print("debug : a ajouté le taquin courant à l'historique")
         for i in range(len(expansion)):
             if not expansion[i] == None:
                 expansion[i].f = expansion[i].calculer_f(pond)
                 if not historique.contient(expansion[i]):
                     frontiere.ajouter(expansion[i])
-            print("debug : a ajouté un état à la frontière")
-
-        print("Fin d'une itération.\n\n")
