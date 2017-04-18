@@ -21,7 +21,7 @@ POIDS = ((36, 12, 12, 4, 1, 1, 4, 1, 0),    #pi1
 COEFF = (4, 1, 4, 1, 4, 1)  #rho1 à rho6
 
 ###############################################################################
-# CLASSES ET METHODES
+# CLASSES ET METHODES                                                         #
 ###############################################################################
 
 class Taquin:
@@ -47,9 +47,6 @@ class Taquin:
         self.chemin = ""
         self.cout = 0
         self.f = 0
-
-    def est_resoluble(self):
-        pass
 
     def est_solution(self):
         """Renvoie True si le taquin est résolu."""
@@ -259,10 +256,10 @@ class Taquin:
         Fonction intermédiaire pour la fonction d'évaluation f."""
         elem = [self.dist_elem(i) for i in range(len(self.etat))]
         elem = tuple(elem) 
-        return sum(POIDS[k][i] * elem(i) for i in range(9)) / COEFF[k]
+        return sum(POIDS[k][i] * elem[i] for i in range(9)) / COEFF[k]
 
     def calculer_f(self, k):
-        self.f = self.cout + self.manhattan(k)
+        return self.cout + self.manhattan(k)
 
 
 class Frontiere:
@@ -296,7 +293,7 @@ class DejaExplores:
 # ALGORITHME A*                                                               #
 ###############################################################################
 
-def a_etoile():
+def graph_search():
     # Initialisation =====================================================
     t0 = Taquin(input("Entrer la taille du taquin : "))
     pond = input("Pondération pour les distances de Manhattan (0 à 5) : ")
@@ -307,8 +304,6 @@ def a_etoile():
     frontiere.ajouter(t0)
     historique = DejaExplores() #crée l'ensemble des états déjà explorés
 
-    if not t0.est_resoluble():
-        return "Taquin non résoluble : pas de solution"
     if t0.est_solution():
         print("Le taquin est déjà solution.")
         return ""
@@ -328,7 +323,7 @@ def a_etoile():
         historique.ajouter(t)
         for i in range(len(expansion)):
             if not expansion[i] == None:
-                expansion[i].f = expansion[i].calculer_f(cout, pond)
+                expansion[i].f = expansion[i].calculer_f(pond)
                 if not historique.contient(expansion[i]):
                     frontiere.ajouter(expansion[i])
 
