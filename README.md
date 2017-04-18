@@ -20,8 +20,8 @@ Développé en Python 3.6.0
 - Télécharger le fichier `taquin.py`
 - Si besoin, installer la dernière version de Python 3 sur [le site officiel]
 (https://www.python.org/downloads/windows/) ou avec votre gestionnaire de packages 
-habituel.
-- Ouvrir un terminal, aller dans le répertoire contenant `taquin.py` et lancez
+habituel
+- Ouvrir un terminal, aller dans le répertoire contenant `taquin.py` et lancer
 la commande `python`
 
 ## Utilisation
@@ -29,6 +29,7 @@ la commande `python`
 ```python
 >>> import taquin
 >>> taquin.graph_search()
+```
 - On vous demandera la taille du taquin : le programme ne fonctionne pour l'instant
 qu'avec des tailles entre 1 et 3 inclus.
 - On demandera un coefficient qui détermine la façon de calculer la fonction 
