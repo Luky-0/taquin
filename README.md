@@ -31,7 +31,7 @@ la commande `python`
 >>> taquin.graph_search()
 ```
 - On vous demandera la taille du taquin : le programme ne fonctionne pour l'instant
-qu'avec des tailles entre 1 et 3 inclus.
+qu'avec des tailles entre 1 et 4 inclus.
 - On demandera un coefficient qui détermine la façon de calculer la fonction 
 d'évaluation servant à la résolution. Voir le code pour les détails.
 - Le taquin s'affiche sous forme d'un ensemble de cases `(ligne,colonne) : numéro`

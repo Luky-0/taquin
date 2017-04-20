@@ -18,7 +18,7 @@ POIDS = ((36, 12, 12, 4, 1, 1, 4, 1, 0),    #pi1
         (8, 7, 6, 5, 3, 2, 4, 1, 0),        #pi5 = pi4
         (1, 1, 1, 1, 1, 1, 1, 1, 0))        #pi6
 
-COEFF = (4, 1, 4, 1, 4, 1)  #rho1 à rho6
+COEFF = (4, 1)  #rho1 à rho6
 
 ###############################################################################
 # CLASSES ET METHODES                                                         #
@@ -260,7 +260,13 @@ class Taquin:
         Fonction intermédiaire pour la fonction d'évaluation f."""
         elem = [self.dist_elem(i) for i in range(len(self.etat))]
         elem = tuple(elem) 
-        return sum(POIDS[k][i] * elem[i] for i in range(len(self.etat))) / COEFF[k]
+        if self.taille < 3:
+            return sum(POIDS[k][i] * elem[i] \
+                    for i in range(len(self.etat))) / COEFF[k%2]
+        else:
+            poids = tuple([len(self.etat)-i-1 for i in range(len(self.etat))])
+            return sum(poids[i] * elem[i] \
+                    for i in range(len(self.etat))) / COEFF[k%2]
 
     def calculer_f(self, k):
         return self.cout + self.manhattan(k)
