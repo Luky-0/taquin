@@ -7,6 +7,7 @@ heuristiques, et on compare les résultats.
 import math
 import copy
 from random import randint
+import time
 ###############################################################################
 # CONSTANTES                                                                  #
 ###############################################################################
@@ -47,6 +48,14 @@ class Taquin:
         self.chemin = ""
         self.cout = 0
         self.f = 0
+    
+    def afficher(self):
+        for i in range(self.taille):
+            liste = []
+            for c in range(self.taille):
+                liste.append(self.etat[i, c])
+            print(liste)
+
 
     def est_solution(self):
         """Renvoie True si le taquin est résolu."""
@@ -313,33 +322,40 @@ class DejaExplores:
 def graph_search():
     # Initialisation =====================================================
     t0 = Taquin(int(input("Entrer la taille du taquin : ")))
-    pond = int(input("Pondération pour les distances de Manhattan (0 à 5) : "))
+    #pond = int(input("Pondération pour les distances de Manhattan (0 à 5) : "))
 
     t0 = t0.melanger_taquin() #pour avoir un taquin non résolu
-    print(t0.etat) #affiche le taquin initial
-    frontiere = Frontiere()
-    frontiere.ajouter(t0)
-    historique = DejaExplores() #crée l'ensemble des états déjà explorés
+    #print(t0.etat) #affiche le taquin initial
+    t0.afficher()
+    for pond in range(5):
+        t = t0
+        frontiere = Frontiere()
+        frontiere.ajouter(t0)
+        historique = DejaExplores() #crée l'ensemble des états déjà explorés
 
-    if t0.est_solution():
-        print("Le taquin est déjà solution.")
-        return ""
-    
-    t = t0
+        if t0.est_solution():
+            print("Le taquin est déjà solution.")
+            return ""
+        
+
+        start_time = time.time()
     # Boucle principale =================================================
-    while True:
+        while not t.est_solution():
 
-        if len(frontiere.etats) == 0:
-            return "Frontière vide : pas de solution"
+            if len(frontiere.etats) == 0:
+                return "Frontière vide : pas de solution"
 
-        t = frontiere.etats.pop(0)
-        if t.est_solution():
-            return t.chemin
+            t = frontiere.etats.pop(0)
+            if t.est_solution():
+                print("recherche terminée en %s secondes" % (time.time() - start_time))
+                print("solution : " + str(t.chemin))
+                print(str(len(historique.etats)) + " états explorés")
 
-        expansion = t.expanser() #On récupère une liste des états accessibles
-        historique.ajouter(t)
-        for i in range(len(expansion)):
-            if not expansion[i] == None:
-                expansion[i].f = expansion[i].calculer_f(pond)
-                if not historique.contient(expansion[i]):
-                    frontiere.ajouter(expansion[i])
+            expansion = t.expanser() #On récupère une liste des états accessibles
+            historique.ajouter(t)
+            for i in range(len(expansion)):
+                if not expansion[i] == None:
+                    expansion[i].f = expansion[i].calculer_f(pond)
+                    if not historique.contient(expansion[i]):
+                        frontiere.ajouter(expansion[i])
+    return 0
